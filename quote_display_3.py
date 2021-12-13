@@ -5,40 +5,40 @@ libdir = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__)
 if os.path.exists(libdir):
     sys.path.append(libdir)
 
-from time_quote_finder import find_time_quote
 import logging
 from lib import epd7in5_V2
 import time
 from PIL import Image,ImageDraw,ImageFont
 import traceback
 
-try:
-    logging.info("Starting quote display")
-    epd = epd7in5_V2.EPD()
-    
-    logging.info("init and Clear")
-    epd.init()
-    epd.Clear()
+# define display function
+# put everything below in it
+def display_quote(o):
+    try:
+        logging.info("Starting quote display")
+        epd = epd7in5_V2.EPD()
+        
+        logging.info("init and Clear")
+        epd.init()
+        epd.Clear()
 
-    DISPLAY_WIDTH = 800
-    DISPLAY_HEIGHT = 480
-    FONT_SIZE = 30
-    TOP_MARGIN = 15
-    SIDE_MARGIN = 15
-    SPACING = 3 # padding between lines of text
+        DISPLAY_WIDTH = 800
+        DISPLAY_HEIGHT = 480
+        FONT_SIZE = 30
+        TOP_MARGIN = 15
+        SIDE_MARGIN = 15
+        SPACING = 3 # padding between lines of text
 
-    garamond = {
-        'regular': ImageFont.truetype('fonts/Garamond-Regular.ttf',FONT_SIZE),
-        'bold': ImageFont.truetype('fonts/Garamond-Bold.ttf',FONT_SIZE),
-        'italic': ImageFont.truetype('fonts/Garamond-Italic.ttf',FONT_SIZE)
-    }
+        garamond = {
+            'regular': ImageFont.truetype('fonts/Garamond-Regular.ttf',FONT_SIZE),
+            'bold': ImageFont.truetype('fonts/Garamond-Bold.ttf',FONT_SIZE),
+            'italic': ImageFont.truetype('fonts/Garamond-Italic.ttf',FONT_SIZE)
+        }
 
-    time_quote = find_time_quote()
-    # time_quote = {'time-of-text': '0:00', 'text-time': 'Midnight', 'text': '"Midnight," you said. What is midnight to the young? And suddenly a festive blaze was flung Across five cedar trunks, snow patches showed, And a patrol car on our bumpy road Came to a crunching stop. Retake, retake!', 'title': 'Pale Fire', 'author': 'Vladimir Nabokov'}
-    # time_quote = {'time-of-text': '0:00', 'text-time': 'twelve', 'text': 'HAMLET: What hour now? HORATIO: I think it lacks of twelve. MARCELLUS: No, it is struck.', 'title': 'Hamlet', 'author': 'William Shakespeare'}
-    print(time_quote)
+        quote = o
 
-    def text(output_path,font_reg,font_bold,quote):
+        font_reg = garamond['regular']
+        font_bold = garamond['bold']
         pre_time = {'self': 'pre_time', 'font': font_reg}
         text_time = {'self': 'text_time', 'font': font_bold, 'text': quote['text-time']}
         post_time = {'self': 'post_time', 'font': font_reg}
@@ -78,8 +78,8 @@ try:
         att_x = right_margin - att_width
         att_y = bottom_margin - (reg_ascent*2) - reg_descent - SPACING
 
-        # set quote box height
-        QUOTE_BOX_HEIGHT = att_y - top_margin
+        # # set quote box height (to center paragraph vertically)
+        # QUOTE_BOX_HEIGHT = att_y - top_margin
 
         ## split the lines
         line = 1
@@ -154,7 +154,7 @@ try:
 
         # print(write_dict)
 
-        # draw the image
+        # THIS IS THE DRAW PART OF THE DISPLAY FUNCTION
         im = Image.new('L', (800,480), 255)
         draw = ImageDraw.Draw(im)
 
@@ -168,16 +168,17 @@ try:
         # draw attribution
         draw.multiline_text((att_x, att_y), attribution, font=font_reg, spacing=SPACING, align='right', fill=0)
 
-        # save to image
-        im.save(output_path)
-        print(f"image saved to {output_path}")
+        # draw to display
+        epd.display(epd.getbuffer(im))
 
-    text(f"{time_quote['author']}_{time_quote['title']}_{SPACING}.bmp", garamond['regular'], garamond['bold'], time_quote)
+        # # save to image
+        # im.save(output_path)
+        # print(f"image saved to {output_path}")
 
-except IOError as e:
-    logging.info(e)
+    except IOError as e:
+        logging.info(e)
 
-except KeyboardInterrupt:
-    logging.info("ctrl + c:")
-    epd7in5_V2.epdconfig.module_exit()
-    exit()
+    except KeyboardInterrupt:
+        logging.info("ctrl + c:")
+        epd7in5_V2.epdconfig.module_exit()
+        exit()
