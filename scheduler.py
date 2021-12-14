@@ -2,7 +2,8 @@ from datetime import datetime
 from school_calendar import calendar, days
 from time_quote_finder import find_time_quote
 from quote_parser import parse_quote
-# from quote_display_3 import display_quote
+from quote_display_3 import display_quote
+import logging
 import time
 # import schedule
 
@@ -38,36 +39,43 @@ sched = get_schedule(t.year,t.month,t.day)
 end = list(sched.keys())[len(list(sched.keys()))-1]
 
 # # testing
-end_hour = 20 # set to whichever you want 0 - 23
-end_minute = 0 # set to whichever you want 0 - 59
+end_hour = 23 # set to whichever you want 0 - 23
+end_minute = 59 # set to whichever you want 0 - 59
 # end_hour = int(end[:end.find(':')])
 # end_minute = int(end[end.find(':')+1:])
 
-while end_hour - t.hour > 0 or end_minute - t.minute > 0: 
-    t = get_time()
-    # print(t)
-    ts = time_string(t.hour,t.minute)
-    wait = 60
-    if ts in list(sched.keys()):
-        to = sched[ts]
-        to.update({
-            'text': t.strftime('%A') + ', ' + t.strftime('%B') + ' ' + str(t.day) + ', ' + str(t.year) + ' ' + sched[ts]['text-time'],
-        }) #works
-        wait *= 5
-    else:
-        to = find_time_quote(ts)
+while end_hour - t.hour > 0 or end_minute - t.minute > 0:
+    try:
+        t = get_time()
+        ts = time_string(t.hour,t.minute)
+        wait = 60
+        if ts in list(sched.keys()):
+            to = sched[ts]
+            to.update({
+                'text': t.strftime('%A') + ', ' + t.strftime('%B') + ' ' + str(t.day) + ', ' + str(t.year) + ' ' + sched[ts]['text-time'],
+            }) #works
+            wait *= 5
+        else:
+            to = find_time_quote(ts)
 
-    print(to)
-    # display_quote(to)
-    q = parse_quote(to)
-    # print(q)
-    # send to epd
-    display_quote(q)
+        print(to)
+        
+        q = parse_quote(to)
+        # print(q)
+        # send to epd
+        display_quote(q)
 
-    # sleep
-    t = get_time()
-    ms = (float(wait*1000000) - (t.second*1000000) - t.microsecond)/1000000
-    time.sleep(ms)
+        # sleep
+        t = get_time()
+        ms = (float(wait*1000000) - (t.second*1000000) - t.microsecond)/1000000
+        time.sleep(ms)
+
+    except IOError as e:
+        logging.info(e)
+
+    except KeyboardInterrupt:
+        logging.info("ctrl + c:")
+        exit()
 
 print('Scheduler has ended for the day')
 

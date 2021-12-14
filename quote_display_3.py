@@ -6,7 +6,7 @@ if os.path.exists(libdir):
     sys.path.append(libdir)
 
 import logging
-from lib import epd7in5_V2
+# from lib import epd7in5_V2
 import time
 from PIL import Image,ImageDraw,ImageFont
 import traceback
@@ -34,26 +34,26 @@ def display_quote(o):
                     k = wdl[t]
                     draw.text((k['x'], k['y']), k['text'], font=k['font'], fill=0)
 
-        # # FOR TESTING save to image
-        # im.save(f"{quote['text-time']}")
+        # FOR TESTING save to image
+        im.save(f"1.bmp")
 
         # draw to display
-        logging.info("Starting quote display")
-        epd = epd7in5_V2.EPD()
+        # logging.info("Starting quote display")
+        # epd = epd7in5_V2.EPD()
         
-        logging.info("init and Clear")
-        epd.init()
-        epd.Clear()
+        # logging.info("init and Clear")
+        # epd.init()
+        # epd.Clear()
 
-        epd.display(epd.getbuffer(im))
+        # epd.display(epd.getbuffer(im))
 
-        logging.info("sending epd to sleep")
-        epd.sleep()
+        # logging.info("sending epd to sleep")
+        # epd.sleep()
 
     except IOError as e:
         logging.info(e)
 
     except KeyboardInterrupt:
         logging.info("ctrl + c:")
-        epd7in5_V2.epdconfig.module_exit()
+        # epd7in5_V2.epdconfig.module_exit()
         exit()

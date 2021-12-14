@@ -130,6 +130,7 @@ def generate_time_quote(s):
                 tt += str(c) + ' '
         except KeyError:
             continue
+    t += '.'
     tt = tt[0:len(tt)-1]
     quote.update({
         'text-time': tt,
