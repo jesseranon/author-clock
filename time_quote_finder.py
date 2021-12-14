@@ -17,6 +17,6 @@ def find_time_quote(s):
                 filtered_results.append(row)
 
         if len(filtered_results) > 0:
-            return filtered_results[random.randint(0,len(filtered_results)-1)]
+            return random.choice(filtered_results)
         else:
             return generate_time_quote(s)
