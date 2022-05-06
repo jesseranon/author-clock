@@ -1,12 +1,3 @@
-Used several resources for gathering quotes, including:
-
-- https://github.com/solarkennedy/epaper-watch/
-
-Uses Waveshare e-paper display:
-
-https://www.waveshare.com/7.5inch-e-paper-hat.htm
-https://github.com/waveshare/e-Paper/
-
 # Raspberry Pi Author Clock
 This is a DIY version of The  Author Clock.  The underlying script is written in Python and deployed on Raspberry Pi with a Waveshare e-paper display, mounted on a normal picture frame.
 
@@ -20,6 +11,13 @@ This is a DIY version of The  Author Clock.  The underlying script is written in
 **Tech used:** Raspberry Pi Zero WH, Waveshare e-paper display, Python
 
 Aside from Waveshare's e-paper software that controls the display, the script that runs the clock is written in python. It uses a Cron job to start the Python script every day, as it is set to stop at a certain time every day because it is in a classroom.
+
+Gathered quotes from multiple sources including:
+https://github.com/solarkennedy/epaper-watch/
+
+e-paper hat
+https://www.waveshare.com/7.5inch-e-paper-hat.htm
+https://github.com/waveshare/e-Paper/
 
 ## Lessons Learned:
 
