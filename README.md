@@ -3,8 +3,7 @@ This is a DIY version of The  Author Clock.  The underlying script is written in
 
 **Link to project:** Blog coming soon
 
-<img width="1287" alt="sfii" src="https://user-images.githubusercontent.com/5935095/167144136-9a018337-9689-4f96-bc9c-d6b80ff5baec.png">
-(This screenshot is zoomed in.)
+ 
 
 ## How It's Made:
 
