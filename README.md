@@ -25,4 +25,6 @@ Python library CSV reader - I learned to use this to parse through a .csv file w
 
 Python library PIL - I learned to use this to generate image files for display on the e-paper display.
 
+## Optimizations:
+
 I also learned that there needs to be some sort of time checking against a service to keep machine time in sync with actual time, as the clock has fallen out of sync.  Being that the clock doesn't have access to the wifi in the building it is in, this is another problem to figure out.  But overall this was a really fun project and it got me to fall in love with coding all over again.
